@@ -9,7 +9,11 @@ import {
   checkUrlStatusCode,
 } from "./utils/index.js";
 
-import { bannerTemplate, tableTemplate } from "./templates/index.js";
+import {
+  bannerTemplate,
+  errorTemplate,
+  tableTemplate,
+} from "./templates/index.js";
 
 const applicationInformation = {
   message: "Running program to test Markdown file links",
@@ -26,7 +30,11 @@ const applicationInformation = {
       const text = await readFile(file);
 
       if (!text) {
-        log.warn("Text cannot be read");
+        errorTemplate({
+          nameFolder: file,
+          errorMessage: "This file is empty.",
+        });
+        continue;
       }
 
       const urls = matchFile(text);
@@ -48,6 +56,8 @@ const applicationInformation = {
         urlsInformation: urlsObj,
       });
     }
+
+    process.exit();
   } catch (err) {
     if (err.code === "ERR_INVALID_ARG_TYPE") {
       log.warn(`[${err.code}] > The path to the files was not provided.`);

@@ -1,3 +1,5 @@
 import { bannerTemplate } from "./BannerTemplate.js";
 import { tableTemplate } from "./TableTemplate.js";
-export { bannerTemplate, tableTemplate };
+import { errorTemplate } from "./ErrorTemplate.js";
+
+export { bannerTemplate, tableTemplate, errorTemplate };
