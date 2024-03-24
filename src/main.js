@@ -9,10 +9,16 @@ import {
   checkUrlStatusCode,
 } from "./utils/index.js";
 
+import { bannerTemplate } from "./templates/index.js";
+
+const applicationInformation = {
+  message: "Running program to test Markdown file links",
+  version: "1.0.0",
+  type: "CLI",
+};
+
 (async () => {
-  log.banner(
-    "Running program to test Markdown file links   |   VERSION: 1.0.0   |   CLI   ",
-  );
+  bannerTemplate(applicationInformation);
   try {
     const argv = validationArgument(process.argv);
     const files = await validationPath(argv.folder);
@@ -27,12 +33,10 @@ import {
 
       const links = matchFile(text);
 
-      if (argv.validation) {
-        for (const link of links) {
-          const statusCode = await checkUrlStatusCode(link.url);
+      for (const link of links) {
+        const statusCode = await checkUrlStatusCode(link.url);
 
-          log.link(link.title, link.url, statusCode);
-        }
+        log.link(link.title, link.url, argv.validation ? statusCode : "");
       }
     }
   } catch (err) {
