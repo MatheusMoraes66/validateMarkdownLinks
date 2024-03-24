@@ -9,7 +9,7 @@ import {
   checkUrlStatusCode,
 } from "./utils/index.js";
 
-import { bannerTemplate } from "./templates/index.js";
+import { bannerTemplate, tableTemplate } from "./templates/index.js";
 
 const applicationInformation = {
   message: "Running program to test Markdown file links",
@@ -23,21 +23,30 @@ const applicationInformation = {
     const argv = validationArgument(process.argv);
     const files = await validationPath(argv.folder);
     for (const file of files) {
-      log.jumpLine();
-      log.folder(`Name File`, file);
       const text = await readFile(file);
 
       if (!text) {
         log.warn("Text cannot be read");
       }
 
-      const links = matchFile(text);
+      const urls = matchFile(text);
 
-      for (const link of links) {
-        const statusCode = await checkUrlStatusCode(link.url);
+      let urlsObj = [];
 
-        log.link(link.title, link.url, argv.validation ? statusCode : "");
+      for (const url of urls) {
+        const statusCode = await checkUrlStatusCode(url.value);
+        const obj = {
+          title: url.title,
+          url: url.value,
+          statusCode: statusCode,
+        };
+        urlsObj.push(obj);
       }
+
+      tableTemplate({
+        nameFolder: file,
+        urlsInformation: urlsObj,
+      });
     }
   } catch (err) {
     if (err.code === "ERR_INVALID_ARG_TYPE") {
