@@ -43,7 +43,9 @@ const applicationInformation = {
       let urlsObj = [];
 
       for (const url of urls) {
-        const statusCode = await checkUrlStatusCode(url.value);
+        const statusCode = argv.validation
+          ? await checkUrlStatusCode(url.value)
+          : "";
         const obj = {
           title: url.title,
           url: url.value,
