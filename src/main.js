@@ -11,6 +11,7 @@ import {
 
 import {
   bannerTemplate,
+  endTemplate,
   errorTemplate,
   tableTemplate,
 } from "./templates/index.js";
@@ -57,6 +58,7 @@ const applicationInformation = {
       });
     }
 
+    endTemplate();
     process.exit();
   } catch (err) {
     if (err.code === "ERR_INVALID_ARG_TYPE") {
